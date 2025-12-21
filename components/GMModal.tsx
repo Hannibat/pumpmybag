@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useWriteContract, useSwitchChain, useAccount } from "wagmi";
-import { base, baseSepolia } from "wagmi/chains";
+import { useWriteContract, useSwitchChain, useAccount, useEnsAddress } from "wagmi";
+import { base, baseSepolia, mainnet } from "wagmi/chains";
+import { toCoinType } from "viem/ens";
 import { DAILY_GM_ADDRESS, DAILY_GM_ABI } from "@/lib/contract";
 import toast from "react-hot-toast";
 
@@ -25,6 +26,31 @@ export default function GMModal({ onClose }: GMModalProps) {
 
   // Use the actual wallet's chain ID, not the default from config
   const chainId = chain?.id;
+
+  // Detect name type for ENS/Basename resolution
+  const isBasename = friendAddress.endsWith('.base.eth');
+  const isEnsName = friendAddress.includes('.') && !isBasename;
+
+  // Resolve .eth names via Ethereum mainnet
+  const { data: ensAddress, isLoading: ensLoading } = useEnsAddress({
+    name: isEnsName ? friendAddress : undefined,
+    chainId: mainnet.id,
+  });
+
+  // Resolve .base.eth names using ENSIP-19
+  // NOTE: Basenames require resolution through mainnet with coinType parameter
+  const { data: basenameAddress, isLoading: basenameLoading } = useEnsAddress({
+    name: isBasename ? friendAddress : undefined,
+    chainId: mainnet.id, // Must use mainnet, not base.id!
+    coinType: toCoinType(base.id), // Converts Base chainId to ENSIP-11 coin type
+  });
+
+  const resolvedAddress = ensAddress || basenameAddress;
+  const isResolving = ensLoading || basenameLoading;
+
+  // Final address to use for transaction
+  const finalAddress = resolvedAddress ||
+    (friendAddress.startsWith('0x') && friendAddress.length === 42 ? friendAddress as `0x${string}` : null);
 
   // Show success toast and close modal when transaction succeeds
   useEffect(() => {
@@ -105,13 +131,32 @@ export default function GMModal({ onClose }: GMModalProps) {
     }
 
     if (!friendAddress) {
-      toast.error("Please enter a friend's address");
+      toast.error("Please enter a friend's address or ENS name");
       return;
     }
 
-    // Validate address format
-    if (!friendAddress.startsWith("0x") || friendAddress.length !== 42) {
-      toast.error("Invalid address format");
+    // Check if still resolving
+    if (isResolving) {
+      toast.error("Still resolving name...");
+      return;
+    }
+
+    // For names (.eth, .base.eth), check if resolved
+    if (friendAddress.includes('.')) {
+      if (!resolvedAddress) {
+        toast.error("Could not resolve name. Please check and try again.");
+        return;
+      }
+    } else {
+      // Validate raw address format
+      if (!friendAddress.startsWith("0x") || friendAddress.length !== 42) {
+        toast.error("Invalid address format");
+        return;
+      }
+    }
+
+    if (!finalAddress) {
+      toast.error("Invalid address");
       return;
     }
 
@@ -151,7 +196,7 @@ export default function GMModal({ onClose }: GMModalProps) {
         address: DAILY_GM_ADDRESS,
         abi: DAILY_GM_ABI,
         functionName: "gmTo",
-        args: [friendAddress as `0x${string}`],
+        args: [finalAddress],
       });
     } catch (err) {
       const error = err as Error;
@@ -203,11 +248,25 @@ export default function GMModal({ onClose }: GMModalProps) {
           <div className="space-y-4">
             <input
               type="text"
-              placeholder="Friend&apos;s address (0x...)"
+              placeholder="ENS, Basename, or address (0x...)"
               value={friendAddress}
               onChange={(e) => setFriendAddress(e.target.value)}
               className="w-full bg-purple-800/50 text-white py-4 px-6 rounded-xl text-lg placeholder-purple-300"
             />
+
+            {friendAddress.includes('.') && (
+              <div className="text-sm text-purple-300 px-2">
+                {isResolving && "Resolving..."}
+                {!isResolving && resolvedAddress && (
+                  <span className="text-green-400">
+                    → {resolvedAddress.slice(0, 6)}...{resolvedAddress.slice(-4)}
+                  </span>
+                )}
+                {!isResolving && !resolvedAddress && friendAddress.length > 3 && (
+                  <span className="text-red-400">Name not found</span>
+                )}
+              </div>
+            )}
 
             <button
               onClick={handleSendGMToFriend}
