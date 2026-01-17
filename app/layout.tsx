@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -59,7 +60,6 @@ export const metadata: Metadata = {
     ...frameMetadata,
     "fc:frame": miniAppMetadata,
     "fc:miniapp": miniAppMetadata,
-    "base:app_id": "696baa0ff22fe462e74c11b3",
   },
 };
 
@@ -70,30 +70,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* 🟢 Meta Farcaster/Base */}
+        <meta name="base:app_id" content="696baa0ff22fe462e74c11b3" />
+
+        {/* Viewport */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+      </head>
       <body className="antialiased">
         <Providers>
           {children}
           <Toaster
             position="top-right"
             toastOptions={{
-              style: {
-                background: '#0891b2',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#10b981',
-                  secondary: '#fff',
-                },
-              },
-              error: {
-                duration: 4000,
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
-                },
-              },
+              style: { background: '#0891b2', color: '#fff' },
+              success: { duration: 3000, iconTheme: { primary: '#10b981', secondary: '#fff' } },
+              error: { duration: 4000, iconTheme: { primary: '#ef4444', secondary: '#fff' } },
             }}
           />
         </Providers>
