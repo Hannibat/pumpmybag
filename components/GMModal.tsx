@@ -10,9 +10,10 @@ import toast from "react-hot-toast";
 interface GMModalProps {
   onClose: () => void;
   address?: `0x${string}`;
+  onSuccess?: () => void;
 }
 
-export default function GMModal({ onClose }: GMModalProps) {
+export default function GMModal({ onClose, onSuccess }: GMModalProps) {
   const [friendAddress, setFriendAddress] = useState("");
   const [showFriendInput, setShowFriendInput] = useState(false);
   const { writeContract, isPending, isSuccess } = useWriteContract();
@@ -55,13 +56,22 @@ export default function GMModal({ onClose }: GMModalProps) {
   // Show success toast and close modal when transaction succeeds
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Bag pumped successfully! 🚀");
+      toast.success("Bag pumped successfully! 🚀", {
+        duration: 3000,
+        icon: '🎉',
+      });
+      
+      // Trigger confetti animation
+      if (onSuccess) {
+        onSuccess();
+      }
+      
       setTimeout(() => {
         onClose();
         window.location.reload();
       }, 2000);
     }
-  }, [isSuccess, onClose]);
+  }, [isSuccess, onClose, onSuccess]);
 
   const handleGM = async () => {
     if (!isConnected) {
@@ -214,8 +224,8 @@ export default function GMModal({ onClose }: GMModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-purple-700 to-fuchsia-900 rounded-3xl p-8 max-w-md w-full shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-purple-700 to-fuchsia-900 rounded-3xl p-8 max-w-md w-full shadow-2xl animate-scaleIn">
         <h2 className="text-white text-4xl font-bold text-center mb-6">
           Choose Pump Type
         </h2>
@@ -225,14 +235,14 @@ export default function GMModal({ onClose }: GMModalProps) {
             <button
               onClick={handleGM}
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-lg hover:shadow-purple-500/50"
             >
               {isPending ? "Pumping..." : "Pump"}
             </button>
 
             <button
               onClick={handleGMToFriend}
-              className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform"
+              className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-fuchsia-500/50"
             >
               Pump for a Fren
             </button>
@@ -251,7 +261,7 @@ export default function GMModal({ onClose }: GMModalProps) {
               placeholder="ENS, Basename, or address (0x...)"
               value={friendAddress}
               onChange={(e) => setFriendAddress(e.target.value)}
-              className="w-full bg-purple-900/50 text-white py-4 px-6 rounded-xl text-lg placeholder-purple-300"
+              className="w-full bg-purple-900/50 text-white py-4 px-6 rounded-xl text-lg placeholder-purple-300 border-2 border-purple-500/30 focus:border-purple-400 focus:outline-none transition-colors"
             />
 
             {friendAddress.includes('.') && (
@@ -271,7 +281,7 @@ export default function GMModal({ onClose }: GMModalProps) {
             <button
               onClick={handleSendGMToFriend}
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-lg hover:shadow-purple-500/50"
             >
               {isPending ? "Pumping..." : "Send Pump"}
             </button>
