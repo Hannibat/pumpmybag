@@ -9,6 +9,8 @@ import CountdownTimer from "@/components/CountdownTimer";
 import Stats from "@/components/Stats";
 import WalletConnect from "@/components/WalletConnect";
 import NetworkIndicator from "@/components/NetworkIndicator";
+import ParticlesBackground from "@/components/ParticlesBackground";
+import Confetti from "@/components/Confetti";
 
 // Determine target chain based on environment
 const targetChain = process.env.NEXT_PUBLIC_CHAIN_ID === '8453' ? base : baseSepolia;
@@ -19,6 +21,7 @@ export default function Home() {
   const [showCountdown, setShowCountdown] = useState(false);
   const [gmsReceived, setGmsReceived] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const publicClient = usePublicClient({ chainId: targetChain.id });
 
   useEffect(() => {
@@ -192,8 +195,20 @@ export default function Home() {
     }
   };
 
+  const handleModalClose = () => {
+    setShowModal(false);
+    // Trigger confetti when modal closes (meaning transaction was successful)
+    setShowConfetti(true);
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-950 via-violet-900 to-fuchsia-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Particles Background */}
+      <ParticlesBackground />
+
+      {/* Confetti */}
+      <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
       {/* Wallet Connect Button */}
       <WalletConnect />
 
@@ -219,17 +234,31 @@ export default function Home() {
             onClick={handleTapToGM}
             className="relative group"
           >
-            {/* Ripple circles */}
-            <div className="absolute inset-0 rounded-full bg-purple-400/20 blur-2xl group-hover:bg-purple-400/30 transition-all duration-500" />
-            <div className="absolute inset-0 rounded-full bg-purple-400/10 scale-125 blur-3xl group-hover:scale-150 transition-all duration-700" />
+            {/* Enhanced Ripple circles with animation */}
+            {canGMToday() && (
+              <>
+                <div className="absolute inset-0 rounded-full bg-purple-400/30 blur-2xl group-hover:bg-purple-400/40 animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-purple-400/20 scale-125 blur-3xl group-hover:scale-150 animate-ping opacity-75" 
+                     style={{ animationDuration: '2s' }} />
+                <div className="absolute inset-0 rounded-full bg-fuchsia-400/20 scale-110 blur-2xl animate-pulse" 
+                     style={{ animationDuration: '3s' }} />
+              </>
+            )}
 
-            {/* Main button */}
-            <div className="relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-105 transition-transform">
+            {/* Main button with enhanced glow */}
+            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-105 transition-transform ${
+              canGMToday() ? 'ring-4 ring-purple-400/50 ring-offset-4 ring-offset-purple-950 shadow-purple-500/50 shadow-2xl' : ''
+            }`}>
               <div className="text-center">
                 <div className="text-sm opacity-80 mb-2">
                   {mounted && address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Wallet"}
                 </div>
                 <div className="text-3xl">Tap to Pump</div>
+                {canGMToday() && (
+                  <div className="text-xs mt-2 opacity-70 animate-bounce">
+                    ✨ Ready to pump!
+                  </div>
+                )}
               </div>
             </div>
           </button>
@@ -239,7 +268,7 @@ export default function Home() {
       {/* GM Type Modal */}
       {showModal && (
         <GMModal
-          onClose={() => setShowModal(false)}
+          onClose={handleModalClose}
           address={address}
         />
       )}
