@@ -55,7 +55,7 @@ export default function GMModal({ onClose }: GMModalProps) {
   // Show success toast and close modal when transaction succeeds
   useEffect(() => {
     if (isSuccess) {
-      toast.success("GM sent successfully! 🎉");
+      toast.success("Bag pumped successfully! 🚀");
       setTimeout(() => {
         onClose();
         window.location.reload();
@@ -112,11 +112,11 @@ export default function GMModal({ onClose }: GMModalProps) {
       if (error.message?.includes("User rejected")) {
         toast.error("Transaction rejected");
       } else if (error.message?.includes("AlreadyGMToday")) {
-        toast.error("You already GM'd today! Come back tomorrow");
+        toast.error("You already pumped today! Come back tomorrow");
       } else {
-        toast.error("Failed to send GM. Please try again");
+        toast.error("Failed to pump bag. Please try again");
       }
-      console.error("Error sending GM:", err);
+      console.error("Error pumping bag:", err);
     }
   };
 
@@ -203,21 +203,21 @@ export default function GMModal({ onClose }: GMModalProps) {
       if (error.message?.includes("User rejected")) {
         toast.error("Transaction rejected");
       } else if (error.message?.includes("AlreadyGMToday")) {
-        toast.error("You already GM'd today! Come back tomorrow");
+        toast.error("You already pumped today! Come back tomorrow");
       } else if (error.message?.includes("InvalidRecipient")) {
         toast.error("Invalid recipient address");
       } else {
-        toast.error("Failed to send GM. Please try again");
+        toast.error("Failed to pump bag. Please try again");
       }
-      console.error("Error sending GM to friend:", error);
+      console.error("Error pumping friend's bag:", error);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-indigo-700 to-indigo-900 rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <div className="bg-gradient-to-br from-purple-700 to-fuchsia-900 rounded-3xl p-8 max-w-md w-full shadow-2xl">
         <h2 className="text-white text-4xl font-bold text-center mb-6">
-          Choose GM Type
+          Choose Pump Type
         </h2>
 
         {!showFriendInput ? (
@@ -225,23 +225,23 @@ export default function GMModal({ onClose }: GMModalProps) {
             <button
               onClick={handleGM}
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-cyan-600 to-emerald-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
             >
-              {isPending ? "Sending..." : "GM"}
+              {isPending ? "Pumping..." : "Pump"}
             </button>
 
             <button
               onClick={handleGMToFriend}
-              className="w-full bg-gradient-to-r from-teal-400 to-cyan-600 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform"
+              className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform"
             >
-              GM to a Fren
+              Pump for a Fren
             </button>
 
             <button
               onClick={onClose}
               className="w-full bg-gray-700 text-white py-6 rounded-2xl text-2xl font-bold hover:bg-gray-600 transition-colors"
             >
-              Cancel
+              Not Today
             </button>
           </div>
         ) : (
@@ -251,11 +251,11 @@ export default function GMModal({ onClose }: GMModalProps) {
               placeholder="ENS, Basename, or address (0x...)"
               value={friendAddress}
               onChange={(e) => setFriendAddress(e.target.value)}
-              className="w-full bg-indigo-900/50 text-white py-4 px-6 rounded-xl text-lg placeholder-teal-400"
+              className="w-full bg-purple-900/50 text-white py-4 px-6 rounded-xl text-lg placeholder-purple-300"
             />
 
             {friendAddress.includes('.') && (
-              <div className="text-sm text-teal-400 px-2">
+              <div className="text-sm text-purple-300 px-2">
                 {isResolving && "Resolving..."}
                 {!isResolving && resolvedAddress && (
                   <span className="text-green-400">
@@ -271,9 +271,9 @@ export default function GMModal({ onClose }: GMModalProps) {
             <button
               onClick={handleSendGMToFriend}
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-cyan-600 to-emerald-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50"
             >
-              {isPending ? "Sending..." : "Send GM"}
+              {isPending ? "Pumping..." : "Send Pump"}
             </button>
 
             <button
