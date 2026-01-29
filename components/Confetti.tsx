@@ -66,7 +66,7 @@ export default function Confetti({ active, onComplete }: ConfettiProps) {
     }
 
     let animationFrameId: number;
-    let startTime = Date.now();
+    const startTime = Date.now();
     const duration = 4000; // 4 seconds
 
     const drawShape = (piece: ConfettiPiece) => {
