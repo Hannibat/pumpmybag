@@ -189,11 +189,8 @@ export default function Home() {
       return;
     }
 
-    if (canGMToday()) {
-      setShowModal(true);
-    } else {
-      setShowCountdown(true);
-    }
+    // Always open modal - let the smart contract decide what's allowed
+    setShowModal(true);
   };
 
   const handlePumpSuccess = () => {
