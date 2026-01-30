@@ -11,6 +11,7 @@ import WalletConnect from "@/components/WalletConnect";
 import NetworkIndicator from "@/components/NetworkIndicator";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import Confetti from "@/components/Confetti";
+import Image from "next/image";
 
 // Determine target chain based on environment
 const targetChain = process.env.NEXT_PUBLIC_CHAIN_ID === '8453' ? base : baseSepolia;
@@ -219,6 +220,18 @@ export default function Home() {
       <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl" />
 
       <div className="z-10 w-full max-w-md">
+        {/* Logo at top */}
+        <div className="flex justify-center mb-8">
+          <Image 
+            src="/iconbutton.jpg" 
+            alt="PumpMyBag Logo" 
+            width={180} 
+            height={180}
+            className="drop-shadow-2xl"
+            priority
+          />
+        </div>
+
         {/* Stats Section */}
         <Stats
           yourGMs={Number(userStreak || 0)}
@@ -244,9 +257,9 @@ export default function Home() {
               </>
             )}
 
-            {/* Main button with enhanced glow */}
+            {/* Main button with enhanced glow - NO RING */}
             <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-105 transition-transform ${
-              canGMToday() ? 'ring-4 ring-purple-400/50 ring-offset-4 ring-offset-purple-950 shadow-purple-500/50 shadow-2xl' : ''
+              canGMToday() ? 'shadow-purple-500/50' : ''
             }`}>
               <div className="text-center">
                 <div className="text-sm opacity-80 mb-2">
