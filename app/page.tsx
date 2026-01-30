@@ -195,9 +195,8 @@ export default function Home() {
     }
   };
 
-  const handleModalClose = () => {
-    setShowModal(false);
-    // Trigger confetti when modal closes (meaning transaction was successful)
+  const handlePumpSuccess = () => {
+    // Trigger confetti only when pump is successful
     setShowConfetti(true);
   };
 
@@ -247,7 +246,7 @@ export default function Home() {
 
             {/* Main button with enhanced glow */}
             <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-105 transition-transform ${
-              canGMToday() ? 'ring-4 ring-purple-400/50 shadow-purple-500/50 shadow-2xl' : ''
+              canGMToday() ? 'ring-4 ring-purple-400/50 ring-offset-4 ring-offset-purple-950 shadow-purple-500/50 shadow-2xl' : ''
             }`}>
               <div className="text-center">
                 <div className="text-sm opacity-80 mb-2">
@@ -268,7 +267,8 @@ export default function Home() {
       {/* GM Type Modal */}
       {showModal && (
         <GMModal
-          onClose={handleModalClose}
+          onClose={() => setShowModal(false)}
+          onSuccess={handlePumpSuccess}
           address={address}
         />
       )}
