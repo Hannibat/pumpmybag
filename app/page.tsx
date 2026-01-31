@@ -210,25 +210,25 @@ export default function Home() {
 
       {/* Mobile Header - Only visible on mobile */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-purple-950/95 via-purple-950/70 to-transparent backdrop-blur-md p-3 pb-4">
-        <div className="flex justify-between items-center gap-2">
+        <div className="flex justify-between items-center gap-2 h-12">
           {/* Left side - Leaderboard */}
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold h-10"
+            className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white px-4 py-2.5 rounded-full shadow-lg flex items-center justify-center gap-1.5 text-sm font-bold h-11"
           >
             <span className="text-lg">🏆</span>
             <span>Top</span>
           </button>
           
-          {/* Right side - Wallet */}
-          <div className="flex-shrink-0">
+          {/* Right side - Wallet - force same height */}
+          <div className="flex items-center h-11">
             <WalletConnect />
           </div>
         </div>
       </div>
 
       {/* Desktop Wallet - Only visible on desktop */}
-      <div className="hidden md:block">
+      <div className="hidden md:block fixed top-4 right-4 z-50">
         <WalletConnect />
       </div>
 
