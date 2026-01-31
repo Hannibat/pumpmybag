@@ -11,6 +11,7 @@ import WalletConnect from "@/components/WalletConnect";
 import NetworkIndicator from "@/components/NetworkIndicator";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import Confetti from "@/components/Confetti";
+import Leaderboard from "@/components/Leaderboard";
 import Image from "next/image";
 
 // Determine target chain based on environment
@@ -211,6 +212,9 @@ export default function Home() {
 
       {/* Network Indicator */}
       <NetworkIndicator />
+
+      {/* Leaderboard */}
+      <Leaderboard currentUserAddress={address} />
 
       {/* Background gradient circles */}
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl" />
