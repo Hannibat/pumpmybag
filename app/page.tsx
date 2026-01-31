@@ -209,16 +209,21 @@ export default function Home() {
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
       {/* Mobile Header - Only visible on mobile */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-purple-950/90 via-purple-950/50 to-transparent backdrop-blur-sm p-3">
-        <div className="flex justify-end items-center gap-2">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-purple-950/95 via-purple-950/70 to-transparent backdrop-blur-md p-3 pb-4">
+        <div className="flex justify-between items-start gap-2">
+          {/* Left side - Leaderboard */}
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 text-sm"
+            className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white px-3 py-2 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold"
           >
-            <span>🏆</span>
-            <span className="font-bold">Top</span>
+            <span className="text-lg">🏆</span>
+            <span>Top</span>
           </button>
-          <WalletConnect />
+          
+          {/* Right side - Wallet */}
+          <div className="flex-shrink-0">
+            <WalletConnect />
+          </div>
         </div>
       </div>
 
