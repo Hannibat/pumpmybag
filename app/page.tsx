@@ -24,6 +24,7 @@ export default function Home() {
   const [gmsReceived, setGmsReceived] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const publicClient = usePublicClient({ chainId: targetChain.id });
 
   useEffect(() => {
@@ -207,20 +208,40 @@ export default function Home() {
       {/* Confetti */}
       <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
-      {/* Wallet Connect Button */}
-      <WalletConnect />
+      {/* Mobile Header - Only visible on mobile */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-purple-950/90 via-purple-950/50 to-transparent backdrop-blur-sm p-3">
+        <div className="flex justify-end items-center gap-2">
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 text-sm"
+          >
+            <span>🏆</span>
+            <span className="font-bold">Top</span>
+          </button>
+          <WalletConnect />
+        </div>
+      </div>
+
+      {/* Desktop Wallet - Only visible on desktop */}
+      <div className="hidden md:block">
+        <WalletConnect />
+      </div>
 
       {/* Network Indicator */}
       <NetworkIndicator />
 
       {/* Leaderboard */}
-      <Leaderboard currentUserAddress={address} />
+      <Leaderboard 
+        currentUserAddress={address} 
+        isOpen={showLeaderboard}
+        onOpenChange={setShowLeaderboard}
+      />
 
       {/* Background gradient circles */}
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl" />
       <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl" />
 
-      <div className="z-10 w-full max-w-md">
+      <div className="z-10 w-full max-w-md pt-16 md:pt-0">
         {/* Logo at top */}
         <div className="flex justify-center mb-8">
           <Image 
