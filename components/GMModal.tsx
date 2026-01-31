@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useWriteContract, useSwitchChain, useAccount, useEnsAddress, useReadContract } from "wagmi";
+import { useWriteContract, useSwitchChain, useAccount, useEnsAddress } from "wagmi";
 import { base, baseSepolia, mainnet } from "wagmi/chains";
 import { toCoinType } from "viem/ens";
 import { DAILY_GM_ADDRESS, DAILY_GM_ABI } from "@/lib/contract";
@@ -13,7 +13,7 @@ interface GMModalProps {
   onSuccess?: () => void;
 }
 
-export default function GMModal({ onClose, onSuccess, address: userAddress }: GMModalProps) {
+export default function GMModal({ onClose, onSuccess }: GMModalProps) {
   const [friendAddress, setFriendAddress] = useState("");
   const [showFriendInput, setShowFriendInput] = useState(false);
   const { writeContract, isPending, isSuccess } = useWriteContract();
@@ -27,26 +27,6 @@ export default function GMModal({ onClose, onSuccess, address: userAddress }: GM
 
   // Use the actual wallet's chain ID, not the default from config
   const chainId = chain?.id;
-
-  // Read last GM timestamp to check if already pumped today
-  const { data: lastGMTimestamp } = useReadContract({
-    address: DAILY_GM_ADDRESS,
-    abi: DAILY_GM_ABI,
-    functionName: "lastGM",
-    args: userAddress ? [userAddress] : undefined,
-  });
-
-  // Check if user already pumped today
-  const hasAlreadyPumped = () => {
-    if (!lastGMTimestamp) return false;
-    const lastGMDate = new Date(Number(lastGMTimestamp) * 1000);
-    const now = new Date();
-    const lastGMDayUTC = Math.floor(lastGMDate.getTime() / 86400000);
-    const currentDayUTC = Math.floor(now.getTime() / 86400000);
-    return currentDayUTC === lastGMDayUTC;
-  };
-
-  const alreadyPumped = hasAlreadyPumped();
 
   // Detect name type for ENS/Basename resolution
   const isBasename = friendAddress.endsWith('.base.eth');
@@ -250,26 +230,12 @@ export default function GMModal({ onClose, onSuccess, address: userAddress }: GM
           Choose Pump Type
         </h2>
 
-        {alreadyPumped && (
-          <div className="bg-purple-900/50 border border-purple-400/50 rounded-xl p-4 mb-4 text-center">
-            <p className="text-purple-200 text-sm">
-              ⚠️ You already pumped your own bag today!
-            </p>
-            <p className="text-purple-300 text-xs mt-1">
-              But you can still pump for a friend! 💜
-            </p>
-          </div>
-        )}
-
         {!showFriendInput ? (
           <div className="space-y-4">
             <button
               onClick={handleGM}
-              disabled={isPending || alreadyPumped}
-              className={`w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-purple-500/50 ${
-                alreadyPumped ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              title={alreadyPumped ? 'Already pumped today' : 'Pump your own bag'}
+              disabled={isPending}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-lg hover:shadow-purple-500/50"
             >
               {isPending ? "Pumping..." : "Pump"}
             </button>
