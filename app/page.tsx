@@ -285,10 +285,10 @@ export default function Home() {
             )}
 
             {/* Main button with enhanced glow and animations */}
-            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl transition-all duration-300 ${
+            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl transition-all duration-300 animate-bounce-slow ${
               canGMToday() 
-                ? 'shadow-purple-500/50 group-hover:scale-110 group-active:scale-95 animate-bounce-slow' 
-                : 'group-hover:scale-105'
+                ? 'shadow-purple-500/50 group-hover:scale-110 group-active:scale-95' 
+                : 'group-hover:scale-105 opacity-75'
             }`}>
               <div className="text-center">
                 <div className="text-sm opacity-80 mb-2 transition-opacity group-hover:opacity-100">
