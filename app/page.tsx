@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAccount, useReadContract, usePublicClient } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
 import { DAILY_GM_ADDRESS, DAILY_GM_ABI } from "@/lib/contract";
@@ -19,12 +19,11 @@ const targetChain = process.env.NEXT_PUBLIC_CHAIN_ID === '8453' ? base : baseSep
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [showModal, setShowModal] = useState(false);
-  const [showCountdown, setShowCountdown] = useState(false);
-  const [gmsReceived, setGmsReceived] = useState(0);
-  const [mounted, setMounted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [gmsReceived, setGmsReceived] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const publicClient = usePublicClient({ chainId: targetChain.id });
 
   useEffect(() => {
@@ -208,14 +207,14 @@ export default function Home() {
   }
 
   // Check if user can GM today
-  const canGMToday = () => {
+  const canGMToday = useCallback(() => {
     if (!lastGMTimestamp) return true;
     const lastGMDate = new Date(Number(lastGMTimestamp) * 1000);
     const now = new Date();
     const lastGMDayUTC = Math.floor(lastGMDate.getTime() / 86400000);
     const currentDayUTC = Math.floor(now.getTime() / 86400000);
     return currentDayUTC > lastGMDayUTC;
-  };
+  }, [lastGMTimestamp]);
 
   const handleTapToGM = () => {
     if (!isConnected) {
