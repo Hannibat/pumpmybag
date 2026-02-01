@@ -61,15 +61,18 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
         icon: '🎉',
       });
       
-      // Trigger confetti animation
+      // Trigger confetti animation first
       if (onSuccess) {
         onSuccess();
       }
       
+      // Close modal immediately to show confetti
+      onClose();
+      
+      // Wait for confetti to finish (4 seconds) before reloading
       setTimeout(() => {
-        onClose();
         window.location.reload();
-      }, 2000);
+      }, 4500);
     }
   }, [isSuccess, onClose, onSuccess]);
 
