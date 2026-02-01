@@ -63,7 +63,7 @@ export default function Leaderboard({ currentUserAddress, isOpen: externalIsOpen
         setLoading(false);
       }, 500);
     }
-  }, [isOpen]);
+  }, [isOpen, leaderboard.length, mockLeaderboard]);
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
