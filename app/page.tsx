@@ -5,7 +5,6 @@ import { useAccount, useReadContract, usePublicClient } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
 import { DAILY_GM_ADDRESS, DAILY_GM_ABI } from "@/lib/contract";
 import GMModal from "@/components/GMModal";
-import CountdownTimer from "@/components/CountdownTimer";
 import Stats from "@/components/Stats";
 import WalletConnect from "@/components/WalletConnect";
 import NetworkIndicator from "@/components/NetworkIndicator";
@@ -25,11 +24,45 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const publicClient = usePublicClient({ chainId: targetChain.id });
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Calculate countdown in real-time
+  useEffect(() => {
+    if (!lastGMTimestamp || canGMToday()) {
+      setCountdown({ hours: 0, minutes: 0, seconds: 0 });
+      return;
+    }
+
+    const calculateTimeLeft = () => {
+      const now = Math.floor(Date.now() / 1000);
+      const lastGMDate = new Date(Number(lastGMTimestamp) * 1000);
+      const nextMidnight = new Date(lastGMDate);
+      nextMidnight.setUTCHours(24, 0, 0, 0);
+      const nextMidnightTimestamp = Math.floor(nextMidnight.getTime() / 1000);
+      const secondsLeft = nextMidnightTimestamp - now;
+
+      if (secondsLeft <= 0) {
+        setCountdown({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const hours = Math.floor(secondsLeft / 3600);
+      const minutes = Math.floor((secondsLeft % 3600) / 60);
+      const seconds = secondsLeft % 60;
+
+      setCountdown({ hours, minutes, seconds });
+    };
+
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastGMTimestamp, canGMToday]);
 
   // Helper function to fetch GMs via Alchemy API route
   async function fetchGMsViaAPI(address: string): Promise<number> {
@@ -186,12 +219,15 @@ export default function Home() {
 
   const handleTapToGM = () => {
     if (!isConnected) {
-      // Prompt user to connect wallet
       alert("Please connect your wallet to pump!");
       return;
     }
 
-    // Always open modal - let the smart contract decide what's allowed
+    // Don't open modal if already pumped today
+    if (!canGMToday()) {
+      return;
+    }
+
     setShowModal(true);
   };
 
@@ -285,22 +321,45 @@ export default function Home() {
             )}
 
             {/* Main button with enhanced glow and animations */}
-            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl transition-all duration-300 animate-bounce-slow ${
+            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl transition-all duration-300 ${
               canGMToday() 
-                ? 'shadow-purple-500/50 group-hover:scale-110 group-active:scale-95' 
-                : 'group-hover:scale-105 opacity-75'
+                ? 'animate-bounce-slow shadow-purple-500/50 group-hover:scale-110 group-active:scale-95 cursor-pointer' 
+                : 'opacity-60 cursor-not-allowed'
             }`}>
               <div className="text-center">
                 <div className="text-sm opacity-80 mb-2 transition-opacity group-hover:opacity-100">
                   {mounted && address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Wallet"}
                 </div>
-                <div className="text-3xl font-extrabold transition-transform group-hover:scale-110">
-                  Tap to Pump
-                </div>
-                {canGMToday() && (
-                  <div className="text-xs mt-2 opacity-70 animate-bounce">
-                    ✨ Ready to pump!
-                  </div>
+                
+                {canGMToday() ? (
+                  <>
+                    <div className="text-3xl font-extrabold transition-transform group-hover:scale-110">
+                      Tap to Pump
+                    </div>
+                    <div className="text-xs mt-2 opacity-70 animate-bounce">
+                      ✨ Ready to pump!
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xl font-bold mb-2">
+                      Already Pumped! 🚀
+                    </div>
+                    <div className="text-sm opacity-90">
+                      Next pump in:
+                    </div>
+                    <div className="flex justify-center gap-1 mt-2 text-lg font-mono">
+                      <span className="bg-purple-800/50 px-2 py-1 rounded">
+                        {String(countdown.hours).padStart(2, '0')}h
+                      </span>
+                      <span className="bg-purple-800/50 px-2 py-1 rounded">
+                        {String(countdown.minutes).padStart(2, '0')}m
+                      </span>
+                      <span className="bg-purple-800/50 px-2 py-1 rounded">
+                        {String(countdown.seconds).padStart(2, '0')}s
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -314,14 +373,6 @@ export default function Home() {
           onClose={() => setShowModal(false)}
           onSuccess={handlePumpSuccess}
           address={address}
-        />
-      )}
-
-      {/* Countdown Timer */}
-      {showCountdown && (
-        <CountdownTimer
-          lastGMTimestamp={Number(lastGMTimestamp)}
-          onClose={() => setShowCountdown(false)}
         />
       )}
     </main>
