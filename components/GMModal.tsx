@@ -6,6 +6,7 @@ import { base, baseSepolia, mainnet } from "wagmi/chains";
 import { toCoinType } from "viem/ens";
 import { DAILY_GM_ADDRESS, DAILY_GM_ABI } from "@/lib/contract";
 import toast from "react-hot-toast";
+import { usePumpSound } from "@/hooks/usePumpSound";
 
 interface GMModalProps {
   onClose: () => void;
@@ -19,6 +20,7 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
   const { writeContract, isPending, isSuccess } = useWriteContract();
   const { switchChainAsync } = useSwitchChain();
   const { isConnected, chain } = useAccount();
+  const { playPumpSound, playSuccessSound } = usePumpSound();
 
   // Determine target chain based on environment
   const targetChain = process.env.NEXT_PUBLIC_CHAIN_ID === '8453' ? base : baseSepolia;
@@ -56,6 +58,9 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
   // Show success toast and close modal when transaction succeeds
   useEffect(() => {
     if (isSuccess) {
+      // Play success sound and vibration! 🎉
+      playSuccessSound();
+      
       toast.success("Bag pumped successfully! 🚀", {
         duration: 3000,
         icon: '🎉',
@@ -74,7 +79,7 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
         window.location.reload();
       }, 4500);
     }
-  }, [isSuccess, onClose, onSuccess]);
+  }, [isSuccess, onClose, onSuccess, playSuccessSound]);
 
   const handleGM = async () => {
     if (!isConnected) {
@@ -236,7 +241,10 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
         {!showFriendInput ? (
           <div className="space-y-4">
             <button
-              onClick={handleGM}
+              onClick={() => {
+                playPumpSound(); // 🔊 Play sound + vibration
+                handleGM();
+              }}
               disabled={isPending}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-lg hover:shadow-purple-500/50"
             >
@@ -244,7 +252,10 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
             </button>
 
             <button
-              onClick={handleGMToFriend}
+              onClick={() => {
+                playPumpSound(); // 🔊 Play sound for friend pump too
+                handleGMToFriend();
+              }}
               className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-fuchsia-500/50"
             >
               Pump for a Fren
@@ -282,7 +293,10 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
             )}
 
             <button
-              onClick={handleSendGMToFriend}
+              onClick={() => {
+                playPumpSound(); // 🔊 Play sound
+                handleSendGMToFriend();
+              }}
               disabled={isPending}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-6 rounded-2xl text-2xl font-bold hover:scale-105 transition-transform disabled:opacity-50 shadow-lg hover:shadow-purple-500/50"
             >
