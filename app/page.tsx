@@ -284,15 +284,19 @@ export default function Home() {
               </>
             )}
 
-            {/* Main button with enhanced glow - NO RING */}
-            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl group-hover:scale-105 transition-transform ${
-              canGMToday() ? 'shadow-purple-500/50' : ''
+            {/* Main button with enhanced glow and animations */}
+            <div className={`relative w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-bold shadow-2xl transition-all duration-300 ${
+              canGMToday() 
+                ? 'shadow-purple-500/50 group-hover:scale-110 group-active:scale-95 animate-bounce-slow' 
+                : 'group-hover:scale-105'
             }`}>
               <div className="text-center">
-                <div className="text-sm opacity-80 mb-2">
+                <div className="text-sm opacity-80 mb-2 transition-opacity group-hover:opacity-100">
                   {mounted && address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Wallet"}
                 </div>
-                <div className="text-3xl">Tap to Pump</div>
+                <div className="text-3xl font-extrabold transition-transform group-hover:scale-110">
+                  Tap to Pump
+                </div>
                 {canGMToday() && (
                   <div className="text-xs mt-2 opacity-70 animate-bounce">
                     ✨ Ready to pump!
