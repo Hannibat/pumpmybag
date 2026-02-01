@@ -30,39 +30,6 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  // Calculate countdown in real-time
-  useEffect(() => {
-    if (!lastGMTimestamp || canGMToday()) {
-      setCountdown({ hours: 0, minutes: 0, seconds: 0 });
-      return;
-    }
-
-    const calculateTimeLeft = () => {
-      const now = Math.floor(Date.now() / 1000);
-      const lastGMDate = new Date(Number(lastGMTimestamp) * 1000);
-      const nextMidnight = new Date(lastGMDate);
-      nextMidnight.setUTCHours(24, 0, 0, 0);
-      const nextMidnightTimestamp = Math.floor(nextMidnight.getTime() / 1000);
-      const secondsLeft = nextMidnightTimestamp - now;
-
-      if (secondsLeft <= 0) {
-        setCountdown({ hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      const hours = Math.floor(secondsLeft / 3600);
-      const minutes = Math.floor((secondsLeft % 3600) / 60);
-      const seconds = secondsLeft % 60;
-
-      setCountdown({ hours, minutes, seconds });
-    };
-
-    calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000);
-
-    return () => clearInterval(interval);
-  }, [lastGMTimestamp, canGMToday]);
-
   // Helper function to fetch GMs via Alchemy API route
   async function fetchGMsViaAPI(address: string): Promise<number> {
     const response = await fetch(`/api/fetch-gms?address=${address}`);
@@ -215,6 +182,39 @@ export default function Home() {
     const currentDayUTC = Math.floor(now.getTime() / 86400000);
     return currentDayUTC > lastGMDayUTC;
   }, [lastGMTimestamp]);
+
+  // Calculate countdown in real-time
+  useEffect(() => {
+    if (!lastGMTimestamp || canGMToday()) {
+      setCountdown({ hours: 0, minutes: 0, seconds: 0 });
+      return;
+    }
+
+    const calculateTimeLeft = () => {
+      const now = Math.floor(Date.now() / 1000);
+      const lastGMDate = new Date(Number(lastGMTimestamp) * 1000);
+      const nextMidnight = new Date(lastGMDate);
+      nextMidnight.setUTCHours(24, 0, 0, 0);
+      const nextMidnightTimestamp = Math.floor(nextMidnight.getTime() / 1000);
+      const secondsLeft = nextMidnightTimestamp - now;
+
+      if (secondsLeft <= 0) {
+        setCountdown({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const hours = Math.floor(secondsLeft / 3600);
+      const minutes = Math.floor((secondsLeft % 3600) / 60);
+      const seconds = secondsLeft % 60;
+
+      setCountdown({ hours, minutes, seconds });
+    };
+
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastGMTimestamp, canGMToday]);
 
   const handleTapToGM = () => {
     if (!isConnected) {
