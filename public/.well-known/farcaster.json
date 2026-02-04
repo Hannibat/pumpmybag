@@ -1,19 +1,21 @@
-  {
+{
   "accountAssociation": {
     "header": "eyJmaWQiOjYwODM5NiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDkzYmJjYzI1QWU3YzY4NTQxMzY4RjI1MjYzRUYzQzlCNDY4YTQxMzQifQ",
     "payload": "eyJkb21haW4iOiJwdW1wbXliYWcudmVyY2VsLmFwcCJ9",
     "signature": "f/Zly51s9ucEVBSxFDA4/37mkswlpnKz2VREfP0ufkQUI/7EBTsAdrWlM9OKylGOpLjTaeiANobVZXFiSLITQRs="
- }
-,
+  },
   "miniapp": {
     "version": "1",
     "name": "PumpMyBag",
+    "subtitle": "Pump your bag every day on Base",
+    "description": "Daily pump streak tracker on Base blockchain. Pump your bag once per day and build your streak! Send pumps to frens and track your daily consistency.",
     "iconUrl": "https://pumpmybag.vercel.app/icon.jpg",
     "homeUrl": "https://pumpmybag.vercel.app",
     "imageUrl": "https://pumpmybag.vercel.app/og-image.jpg",
+    "ogImageUrl": "https://pumpmybag.vercel.app/og-image.jpg",
     "splashImageUrl": "https://pumpmybag.vercel.app/splash.jpg",
     "splashBackgroundColor": "#581c87",
     "primaryCategory": "social",
-    "tags": ["social","daily","pump","streak","base"]
+    "tags": ["social", "daily", "pump", "streak", "base"]
   }
 }
