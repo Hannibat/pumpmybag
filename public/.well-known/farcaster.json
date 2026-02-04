@@ -6,13 +6,13 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "Salutations",
-    "iconUrl": "https://gm-base-three.vercel.app/icon.jpg",
-    "homeUrl": "https://gm-base-three.vercel.app",
-    "imageUrl": "https://gm-base-three.vercel.app/og-image.jpg",
-    "splashImageUrl": "https://gm-base-three.vercel.app/splash.jpg",
+    "name": "PumpMyBag",
+    "iconUrl": "https://pumpmybag.vercel.app/icon.jpg",
+    "homeUrl": "https://pumpmybag.vercel.app",
+    "imageUrl": "https://pumpmybag.vercel.app/og-image.jpg",
+    "splashImageUrl": "https://pumpmybag.vercel.app/splash.jpg",
     "splashBackgroundColor": "#581c87",
     "primaryCategory": "social",
-    "tags": ["social", "daily", "gm", "streak", "base"]
+    "tags": ["social", "daily", "pump", "bags", "streak", "base"]
   }
 }
