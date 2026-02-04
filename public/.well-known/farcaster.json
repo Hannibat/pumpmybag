@@ -7,7 +7,7 @@
   "miniapp": {
     "version": "1",
     "name": "PumpMyBag",
-    "subtitle": "Pump your bag every day on Base",
+    "subtitle": "Daily pump streak on Base",
     "description": "Daily pump streak tracker on Base blockchain. Pump your bag once per day and build your streak! Send pumps to frens and track your daily consistency.",
     "iconUrl": "https://pumpmybag.vercel.app/icon.jpg",
     "homeUrl": "https://pumpmybag.vercel.app",
