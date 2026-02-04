@@ -32,14 +32,13 @@ export function getMiniAppMetadata(
     version: "1",
     imageUrl,
     button: {
-      title: "Say GM",
+      title: "Pump My Bag", // ✅ Changé ici
       action: {
         type: "launch_frame",
         url: baseUrl,
       },
     },
   };
-
   return JSON.stringify(config);
 }
 
@@ -111,7 +110,7 @@ export function getMainPageFrameMetadata(
     aspectRatio: "1.91:1",
     buttons: [
       {
-        label: "Say GM",
+        label: "Pump My Bag", // ✅ Changé ici
         action: "link",
         target: baseUrl,
       },
