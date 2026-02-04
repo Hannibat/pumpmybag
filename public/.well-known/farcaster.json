@@ -5,6 +5,14 @@
     "signature": ""
   },
   "miniapp": {
-    ...
+    "version": "1",
+    "name": "PumpMyBag",
+    "iconUrl": "https://pumpmybag.vercel.app/icon.jpg",
+    "homeUrl": "https://pumpmybag.vercel.app",
+    "imageUrl": "https://pumpmybag.vercel.app/og-image.jpg",
+    "splashImageUrl": "https://pumpmybag.vercel.app/splash.jpg",
+    "splashBackgroundColor": "#581c87",
+    "primaryCategory": "social",
+    "tags": ["social", "daily", "pump", "bags", "streak", "base"]
   }
 }
