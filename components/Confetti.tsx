@@ -66,8 +66,8 @@ export default function Confetti({ active, onComplete }: ConfettiProps) {
     }
 
     let animationFrameId: number;
-    const startTime = Date.now();
-    const duration = 4000; // 4 seconds
+    let startTime = Date.now();
+    const duration = 3000; // 3 seconds instead of 4
 
     const drawShape = (piece: ConfettiPiece) => {
       ctx.save();
@@ -115,8 +115,11 @@ export default function Confetti({ active, onComplete }: ConfettiProps) {
         piece.vy += 0.1; // Gravity
         piece.rotation += piece.rotationSpeed;
 
-        // Draw piece
-        drawShape(piece);
+        // Only draw if still visible on screen (fade out when off-screen)
+        if (piece.y < canvas.height + 50) {
+          // Draw piece
+          drawShape(piece);
+        }
       });
 
       animationFrameId = requestAnimationFrame(animate);
