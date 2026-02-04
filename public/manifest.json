@@ -1,11 +1,11 @@
 {
-  "name": "GM Base",
-  "short_name": "GM Base",
-  "description": "Daily GM streak tracker on Base blockchain. Say GM once per day and build your streak!",
+  "name": "PumpMyBag",
+  "short_name": "PumpMyBag",
+  "description": "Daily pump streak tracker on Base blockchain. Pump your bag every day and build your streak!",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#581c87",
-  "theme_color": "#7c3aed",
+  "theme_color": "#a855f7",
   "orientation": "portrait",
   "icons": [
     {
@@ -22,7 +22,7 @@
     }
   ],
   "screenshots": [],
-  "categories": ["social", "lifestyle"],
+  "categories": ["social", "lifestyle", "entertainment"],
   "lang": "en-US",
   "dir": "ltr"
 }
