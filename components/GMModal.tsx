@@ -74,10 +74,10 @@ export default function GMModal({ onClose, onSuccess }: GMModalProps) {
       // Close modal immediately to show confetti
       onClose();
       
-      // Wait for confetti to finish (4 seconds) before reloading
+      // Wait for confetti to finish (3 seconds) before reloading
       setTimeout(() => {
         window.location.reload();
-      }, 4500);
+      }, 3500);
     }
   }, [isSuccess, onClose, onSuccess, playSuccessSound]);
 
