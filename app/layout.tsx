@@ -72,7 +72,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* 🟢 Meta Farcaster/Base */}
-        <meta name="base:app_id" content="696baa0ff22fe462e74c11b3" />
+        <meta name="base:app_id" content="6983376ebd202a51855da5b2" />
 
         {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
