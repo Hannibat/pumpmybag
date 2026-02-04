@@ -49,10 +49,28 @@ export function usePumpSound(options: UsePumpSoundOptions = {}) {
     
     // Additional longer vibration for success
     if (enableVibration && 'vibrate' in navigator) {
-      // Success pattern: longer vibration
+      // Success pattern: longer celebration vibration
       setTimeout(() => {
-        navigator.vibrate(200);
+        navigator.vibrate([100, 50, 100, 50, 200]);
       }, 100);
+    }
+    
+    // Play a secondary "ding" sound for emphasis
+    if (audioRef.current) {
+      setTimeout(() => {
+        const successAudio = audioRef.current!.cloneNode() as HTMLAudioElement;
+        successAudio.volume = volume * 1.2; // Louder
+        successAudio.playbackRate = 1.2; // Higher pitch
+        successAudio.play().catch(err => console.log('Success audio play failed:', err));
+      }, 150);
+      
+      // Third ding for celebration
+      setTimeout(() => {
+        const successAudio = audioRef.current!.cloneNode() as HTMLAudioElement;
+        successAudio.volume = volume * 1.5; // Even louder
+        successAudio.playbackRate = 1.5; // Highest pitch
+        successAudio.play().catch(err => console.log('Success audio play failed:', err));
+      }, 300);
     }
   };
 
