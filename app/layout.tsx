@@ -29,8 +29,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "GM Base - Daily GM on Base",
-  description: "Say GM every day on Base blockchain. Build your streak and GM your frens!",
+  title: "PumpMyBag - Pump your bag every day on Base",
+  description: "Daily pump streak tracker on Base blockchain. Pump your bag once per day and build your streak!",
   manifest: "/manifest.json",
   icons: {
     icon: [{ url: "/icon.jpg", sizes: "1024x1024", type: "image/jpeg" }],
@@ -39,20 +39,20 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "GM Base",
+    title: "PumpMyBag",
   },
   openGraph: {
-    title: "GM Base - Daily GM on Base",
-    description: "Say GM every day on Base blockchain. Build your streak!",
+    title: "PumpMyBag - Pump your bag every day on Base",
+    description: "Daily pump streak tracker on Base blockchain. Pump your bag and track your consistency!",
     url: baseUrl,
-    siteName: "GM Base",
+    siteName: "PumpMyBag",
     images: [{ url: `${baseUrl}/og-image.jpg`, width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "GM Base - Daily GM on Base",
-    description: "Say GM every day on Base blockchain. Build your streak!",
+    title: "PumpMyBag - Pump your bag every day on Base",
+    description: "Daily pump streak tracker on Base blockchain. Pump your bag and build your streak!",
     images: [`${baseUrl}/og-image.jpg`],
   },
   // Farcaster Frame and Mini App embed metadata
@@ -73,7 +73,6 @@ export default function RootLayout({
       <head>
         {/* 🟢 Meta Farcaster/Base */}
         <meta name="base:app_id" content="6983376ebd202a51855da5b2" />
-
         {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
